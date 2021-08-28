@@ -74,9 +74,8 @@ function getScoreBoard(html) {
     let team2tr = searchData(team2table).find("tr");
     
 
-    
     let team1path = path.join(currentP,team1Name);
-        if(fs.existsSync(team1path)){
+        function team1(team1tr){
             for (let i = 0; i < team1tr.length-1; i += 2) {
                 let d = searchData(".w-100.table.match-details-table tbody tr") 
                 let da = searchData(d[6]).find("td");
@@ -118,54 +117,14 @@ function getScoreBoard(html) {
                     fs.writeFileSync(playerpath1, jsconcontent1);
                 }
             }
-        }else{
-            fs.mkdirSync(team1path);
-            for (let i = 0; i < team1tr.length-1; i += 2) {
-                let d = searchData(".w-100.table.match-details-table tbody tr") 
-                let da = searchData(d[6]).find("td");
-                let date = searchData(da[1]).text();
-                let col = searchData(team1tr[i]).find("td");
-                let name = searchData(col[0]).text();
-                let run = searchData(col[2]).text();
-                let ball = searchData(col[3]).text();
-                let fours = searchData(col[5]).text();
-                let six = searchData(col[6]).text();
-                let sr = searchData(col[7]).text();
-                let v = searchData(".font-weight-bold.match-venue");
-                let venue = searchData(v).text();
-                let stringName = `${name}.json`
-                let playerpath1 = path.join(team1path, stringName);
-                let content = []
-                let obj = {
-                    team1Name,
-                    name,
-                    venue,
-                    date,
-                    team2Name,
-                    run,
-                    ball,
-                    fours,
-                    six,
-                    sr
-                }
-                console.log(name + "-->" + team1Name)
-                if(fs.existsSync(playerpath1)){
-                    let jsonData = fs.readFileSync(playerpath1)
-                    let jsonreadable = JSON.parse(jsonData);
-                    jsonreadable.push(obj);
-                    let jsoncontent = JSON.stringify(jsonreadable);
-                    fs.writeFileSync(playerpath1, jsoncontent);
-                }else{
-                    content.push(obj);
-                    let jsconcontent1 = JSON.stringify(content);
-                    fs.writeFileSync(playerpath1, jsconcontent1);
-                }
-            }
         }
-        
-
+        if(!fs.existsSync(team1path)){
+            fs.mkdirSync(team1path);
+        }
+        team1(team1tr);
+    
         let team2path = path.join(currentP,team2Name);
-        if(fs.existsSync(team2path)){
+        function team2(team2tr){
             for (let i = 0; i < team2tr.length-1; i += 2) {
                 let col = searchData(team2tr[i]).find("td");
                 let d = searchData(".w-100.table.match-details-table tbody tr") 
@@ -206,48 +165,9 @@ function getScoreBoard(html) {
                     fs.writeFileSync(playerpath2, jsconcontent1);
                 }
             }
-        }else{
+        }
+        if(!fs.existsSync(team2path)){
             fs.mkdirSync(team2path);
-            for (let i = 0; i < team2tr.length-1; i += 2) {
-                let d = searchData(".w-100.table.match-details-table tbody tr") 
-                let da = searchData(d[6]).find("td");
-                let date = searchData(da[1]).text();
-                let col = searchData(team2tr[i]).find("td");
-                let name = searchData(col[0]).text();
-                let run = searchData(col[2]).text();
-                let ball = searchData(col[3]).text();
-                let fours = searchData(col[5]).text();
-                let six = searchData(col[6]).text();
-                let sr = searchData(col[7]).text();
-                let v = searchData(".font-weight-bold.match-venue");
-                let venue = searchData(v).text();
-                let playerpath2 = path.join(team2path, `${name}.json`);
-                let content = [];
-                let obj = {
-                    team2Name,
-                    name,
-                    venue,
-                    date,
-                    team1Name,
-                    run,
-                    ball,
-                    fours,
-                    six,
-                    sr
-                }
-                console.log(name + "-->" + team2Name);
-                if(fs.existsSync(playerpath2)){
-                    let jsonData = fs.readFileSync(playerpath2)
-                    let jsonreadable = JSON.parse(jsonData);
-                    jsonreadable.push(obj);
-                    let jsoncontent = JSON.stringify(jsonreadable);
-                    fs.writeFileSync(playerpath2, jsoncontent);
-                }else{
-                    content.push(obj);
-                    let jsconcontent1 = JSON.stringify(content);
-                    fs.writeFileSync(playerpath2, jsconcontent1);
-                }
-            }
-        }    
-    
+        }   
+        team2(team2tr);
 }
