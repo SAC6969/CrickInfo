@@ -123,7 +123,7 @@ function getScoreBoard(html) {
         }
         team1(team1tr);
     
-        let team2path = path.join(currentP,team2Name);
+    let team2path = path.join(currentP,team2Name);
         function team2(team2tr){
             for (let i = 0; i < team2tr.length-1; i += 2) {
                 let col = searchData(team2tr[i]).find("td");
